@@ -1,0 +1,175 @@
+<Window x:Class="FilterDICOM.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FilterDICOM"
+        mc:Ignorable="d"
+        Title="DICOM Study Filter" Height="640" Width="920"
+        MinHeight="560" MinWidth="780"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="DICOM Study Filter"
+                   FontSize="22"
+                   FontWeight="SemiBold"
+                   Margin="0,0,0,16"/>
+
+        <Border Grid.Row="1"
+                BorderBrush="#D8DEE9"
+                BorderThickness="1"
+                CornerRadius="6"
+                Padding="16"
+                Margin="0,0,0,14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="108"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="108"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" VerticalAlignment="Center" Margin="0,0,10,10"/>
+                <TextBox x:Name="PatientNameTextBox"
+                         Grid.Row="0" Grid.Column="1"
+                         Height="30"
+                         Margin="0,0,20,10"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Sex" VerticalAlignment="Center" Margin="0,0,10,10"/>
+                <ComboBox x:Name="PatientSexComboBox"
+                          Grid.Row="0" Grid.Column="3"
+                          Height="30"
+                          SelectedIndex="0"
+                          Margin="0,0,0,10">
+                    <ComboBoxItem Content="Any" Tag=""/>
+                    <ComboBoxItem Content="Male (M)" Tag="M"/>
+                    <ComboBoxItem Content="Female (F)" Tag="F"/>
+                    <ComboBoxItem Content="Other (O)" Tag="O"/>
+                </ComboBox>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Body Parts" VerticalAlignment="Top" Margin="0,5,10,10"/>
+                <ListBox x:Name="BodyPartListBox"
+                         Grid.Row="1" Grid.Column="1"
+                         Height="118"
+                         SelectionMode="Multiple"
+                         ToolTip="Select multiple items. Leave empty to match any body part."
+                         Margin="0,0,20,10">
+                    <ListBoxItem Content="Head"/>
+                    <ListBoxItem Content="Neck"/>
+                    <ListBoxItem Content="Chest"/>
+                    <ListBoxItem Content="Abdomen"/>
+                    <ListBoxItem Content="Pelvis"/>
+                    <ListBoxItem Content="Spine"/>
+                    <ListBoxItem Content="Upper Limb"/>
+                    <ListBoxItem Content="Lower Limb"/>
+                    <ListBoxItem Content="Heart"/>
+                </ListBox>
+
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Age Ranges" VerticalAlignment="Top" Margin="0,5,10,10"/>
+                <Grid Grid.Row="1" Grid.Column="3" Margin="0,0,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ListBox x:Name="AgeRangeListBox"
+                             Height="88"
+                             SelectionMode="Multiple"
+                             ToolTip="Select multiple ranges. Leave empty to match any age.">
+                        <ListBoxItem Content="0-17" Tag="0-17"/>
+                        <ListBoxItem Content="18-29" Tag="18-29"/>
+                        <ListBoxItem Content="30-39" Tag="30-39"/>
+                        <ListBoxItem Content="40-49" Tag="40-49"/>
+                        <ListBoxItem Content="50-59" Tag="50-59"/>
+                        <ListBoxItem Content="60+" Tag="60-200"/>
+                    </ListBox>
+                    <TextBox x:Name="CustomAgeTextBox"
+                             Grid.Row="1"
+                             Height="30"
+                             ToolTip="Custom age or range, for example 30, 30-50, or 30-50,65. Leave empty to skip custom ranges."
+                             Margin="0,8,0,0"/>
+                </Grid>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Input Folder" VerticalAlignment="Center" Margin="0,0,10,10"/>
+                <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="96"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="InputPathTextBox"
+                             Grid.Column="0"
+                             Height="30"
+                             ToolTip="Recursively scans all study folders under this directory."
+                             Margin="0,0,10,0"/>
+                    <Button Grid.Column="1"
+                            Content="Browse..."
+                            Height="30"
+                            Click="BrowseInputButton_Click"/>
+                </Grid>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Output Folder" VerticalAlignment="Center" Margin="0,0,10,10"/>
+                <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="96"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="OutputPathTextBox"
+                             Grid.Column="0"
+                             Height="30"
+                             Margin="0,0,10,0"/>
+                    <Button Grid.Column="1"
+                            Content="Browse..."
+                            Height="30"
+                            Click="BrowseOutputButton_Click"/>
+                </Grid>
+
+                <StackPanel Grid.Row="4"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <TextBlock x:Name="StatusTextBlock"
+                               Text="Ready"
+                               VerticalAlignment="Center"
+                               Foreground="#4C566A"
+                               Margin="0,0,18,0"/>
+                    <Button x:Name="StartButton"
+                            Content="Start Filter"
+                            Width="112"
+                            Height="34"
+                            Click="StartButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Processing Log"
+                       FontWeight="SemiBold"
+                       Margin="0,0,0,8"/>
+            <TextBox x:Name="LogTextBox"
+                     Grid.Row="1"
+                     IsReadOnly="True"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     VerticalScrollBarVisibility="Auto"
+                     HorizontalScrollBarVisibility="Auto"
+                     FontFamily="Consolas"
+                     FontSize="13"/>
+        </Grid>
+    </Grid>
+</Window>
